@@ -1,20 +1,38 @@
 package com.talkify.server.api.comments.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import lombok.Data;
 
-import com.talkify.core.domain.entities.Comment;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.talkify.core.domain.dtos.CommentDto;
+import com.talkify.core.interfaces.repositories.CommentsRepository;
+import com.talkify.core.interfaces.repositories.TalkersRepository;
+import com.talkify.core.use_cases.PostCommentUseCase;
+
+@Data
+class Body {
+  String talkerId;
+  String documentId;
+  CommentDto comment;
+}
 
 @CommentsController
 public class PostCommentController {
+  @Autowired
+  CommentsRepository commentsRepository;
 
-  @GetMapping("path")
-  public String handle() {
-    var dto = new Comment.Dto().id("gg").content("dkfjf").postedAt(null);
+  @Autowired
+  TalkersRepository talkersRepository;
 
-    var comment = new Comment(dto);
-
-    comment.getContent();
-
-    return new String("Oi");
+  @PostMapping
+  public ResponseEntity<Void> handle(@RequestBody Body body) {
+    var useCase = new PostCommentUseCase(commentsRepository, talkersRepository);
+    useCase.execute(body.comment, body.talkerId, body.documentId);
+    return ResponseEntity.noContent().build();
   }
 }
