@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 interface Jpa extends JpaRepository<TalkerModel, UUID> {
-
 }
 
 public class JpaTalkersRepository implements TalkersRepository {

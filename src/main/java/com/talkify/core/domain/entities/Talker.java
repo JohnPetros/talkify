@@ -11,9 +11,8 @@ public final class Talker extends Entity {
 
   public Talker(TalkerDto dto) {
     super(dto.id);
-    System.out.println(dto);
-    this.name = Text.create(dto.name);
-    this.email = Email.create(dto.email);
+    this.name = Text.create(dto.name, "Nome do talker");
+    this.email = Email.create(dto.email, "E-mail do talker");
   }
 
   public Text getName() {

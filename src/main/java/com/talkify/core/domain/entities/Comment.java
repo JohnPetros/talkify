@@ -12,8 +12,8 @@ public final class Comment extends Entity {
 
   public Comment(CommentDto dto) {
     super(dto.id);
-    this.content = Text.create(dto.content);
-    this.postedAt = DateTime.create(dto.postedAt);
+    this.content = Text.create(dto.content, "Conteúdo do comentário");
+    this.postedAt = DateTime.create(dto.postedAt, "Data de postagem do comentário");
     this.talker = new Talker(dto.talker);
   }
 
