@@ -1,49 +1,40 @@
 package com.talkify.core.domain.entities;
 
-import java.time.LocalDateTime;
-
 import com.talkify.core.domain.abstracts.Entity;
-import com.talkify.core.domain.structs.Text;
+import com.talkify.core.domain.dtos.CommentDto;
+import com.talkify.core.domain.records.DateTime;
+import com.talkify.core.domain.records.Text;
 
 public final class Comment extends Entity {
   private Text content;
+  private DateTime postedAt;
+  private Talker talker;
 
-  public Comment(Dto dto) {
+  public Comment(CommentDto dto) {
     super(dto.id);
-    this.content = Text.create("dddj");
+    this.content = Text.create(dto.content);
+    this.postedAt = DateTime.create(dto.postedAt);
+    this.talker = new Talker(dto.talker);
   }
 
-  public String getContent() {
-    return content.value();
+  public Text getContent() {
+    return content;
   }
 
-  public Dto getDto() {
-    return new Comment.Dto().id(this.getId()).content(this.getContent());
+  public DateTime getPostedAt() {
+    return postedAt;
   }
 
-  static public class Dto {
-    String id;
-    String content;
-    LocalDateTime postedAt;
+  public Talker getTalker() {
+    return talker;
+  }
 
-    public Dto id(String id) {
-      this.id = id;
-      return this;
-    }
-
-    public Dto content(String content) {
-      this.content = content;
-      return this;
-    }
-
-    public Dto postedAt(LocalDateTime postedAt) {
-      this.postedAt = postedAt;
-      return this;
-    }
-
-    public Comment create() {
-      return new Comment(this);
-    }
+  public CommentDto getDto() {
+    return new CommentDto()
+        .setId(this.getId().toString())
+        .setContent(this.getContent().value())
+        .setPostedAt(this.getPostedAt().value())
+        .setTalker(this.getTalker().getDto());
   }
 
 }
