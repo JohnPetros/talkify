@@ -25,6 +25,6 @@ public class TalkerModel {
   @Column
   private String name;
 
-  @Column
+  @Column(unique = true)
   private String email;
 }
