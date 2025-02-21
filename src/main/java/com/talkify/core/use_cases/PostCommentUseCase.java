@@ -3,7 +3,6 @@ package com.talkify.core.use_cases;
 import com.talkify.core.domain.dtos.CommentDto;
 import com.talkify.core.domain.entities.Comment;
 import com.talkify.core.domain.entities.Talker;
-import com.talkify.core.domain.exceptions.NotFoundException;
 import com.talkify.core.interfaces.repositories.CommentsRepository;
 import com.talkify.core.interfaces.repositories.TalkersRepository;
 

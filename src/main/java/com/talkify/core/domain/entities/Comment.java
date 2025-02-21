@@ -1,5 +1,7 @@
 package com.talkify.core.domain.entities;
 
+import java.time.LocalDateTime;
+
 import com.talkify.core.domain.abstracts.Entity;
 import com.talkify.core.domain.dtos.CommentDto;
 import com.talkify.core.domain.records.DateTime;

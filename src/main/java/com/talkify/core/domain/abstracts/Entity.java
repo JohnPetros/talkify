@@ -33,12 +33,12 @@ public abstract class Entity {
   @Override
   public String toString() {
     Field[] fields = this.getClass().getDeclaredFields();
-    StringBuilder fieldsString = new StringBuilder("{ ");
+    StringBuilder fieldsString = new StringBuilder("{\n");
 
     for (Field field : fields) {
       field.setAccessible(true);
       try {
-        fieldsString.append(field.getName()).append(": ").append(field.get(this)).append(", ");
+        fieldsString.append("\t").append(field.getName()).append(": ").append(field.get(this)).append(",\n");
       } catch (IllegalAccessException e) {
         fieldsString.append(field.getName()).append(": <inaccessible>, ");
       }
@@ -48,6 +48,6 @@ public abstract class Entity {
       fieldsString.setLength(fieldsString.length() - 2);
     }
 
-    return fieldsString.append(" }").toString();
+    return fieldsString.append("\n}").toString();
   }
 }
