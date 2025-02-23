@@ -15,20 +15,20 @@ public class PostCommentUseCase {
     this.talkersRepository = talkersRepository;
   }
 
-  public void execute(CommentDto commentDto, String talkerId, String documentId) {
+  public CommentDto execute(CommentDto commentDto, String talkerId, String documentId) {
     var currentTalker = talkersRepository.findById(talkerId);
     Talker commentTalker;
-    System.out.println(currentTalker.isEmpty());
     if (currentTalker.isEmpty()) {
       commentTalker = new Talker(commentDto.talker);
-      // talkersRepository.add(commentTalker);
+      System.out.println(commentTalker);
+      talkersRepository.add(commentTalker);
     } else {
       commentTalker = currentTalker.get();
     }
 
     commentDto.setTalker(commentTalker.getDto());
     var comment = new Comment(commentDto);
+    return comment.getDto();
 
-    System.out.println(comment);
   }
 }
