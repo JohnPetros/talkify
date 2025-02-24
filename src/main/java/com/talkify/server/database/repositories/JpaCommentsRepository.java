@@ -10,13 +10,13 @@ import com.talkify.server.database.models.CommentModel;
 
 import java.util.UUID;
 
-interface Jpa extends JpaRepository<CommentModel, UUID> {
+interface Repository extends JpaRepository<CommentModel, UUID> {
 
 }
 
 public class JpaCommentsRepository implements CommentsRepository {
   @Autowired
-  Jpa jpa;
+  Repository repository;
 
   @Autowired
   JpaCommentMapper mapper;
@@ -25,7 +25,7 @@ public class JpaCommentsRepository implements CommentsRepository {
   public void add(Comment comment, String documentId) {
     var model = mapper.toModel(comment);
     model.setDocumentId(UUID.fromString(documentId));
-    jpa.save(model);
+    repository.save(model);
   }
 
 }

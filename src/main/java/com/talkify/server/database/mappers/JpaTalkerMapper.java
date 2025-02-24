@@ -1,5 +1,7 @@
 package com.talkify.server.database.mappers;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.talkify.core.domain.dtos.TalkerDto;
@@ -19,7 +21,7 @@ public class JpaTalkerMapper {
 
   public TalkerModel toModel(Talker entity) {
     var model = TalkerModel.builder()
-        .id(entity.getId())
+        .id(UUID.randomUUID())
         .name(entity.getName().value())
         .email(entity.getEmail().value())
         .build();

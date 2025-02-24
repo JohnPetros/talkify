@@ -14,7 +14,6 @@ import com.talkify.core.use_cases.PostCommentUseCase;
 
 @Data
 class Body {
-  String talkerId;
   String documentId;
   CommentDto comment;
 }
@@ -22,15 +21,15 @@ class Body {
 @CommentsController
 public class PostCommentController {
   @Autowired
-  CommentsRepository commentsRepository;
+  private CommentsRepository commentsRepository;
 
   @Autowired
-  TalkersRepository talkersRepository;
+  private TalkersRepository talkersRepository;
 
   @PostMapping
   public ResponseEntity<Void> handle(@RequestBody Body body) {
     var useCase = new PostCommentUseCase(commentsRepository, talkersRepository);
-    useCase.execute(body.comment, body.talkerId, body.documentId);
+    useCase.execute(body.comment, body.documentId);
     return ResponseEntity.noContent().build();
   }
 }

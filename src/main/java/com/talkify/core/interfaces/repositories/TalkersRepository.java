@@ -8,4 +8,6 @@ public interface TalkersRepository {
   void add(Talker talker);
 
   Optional<Talker> findById(String talkerId);
+
+  Optional<Talker> findByEmail(String talkerEmail);
 }

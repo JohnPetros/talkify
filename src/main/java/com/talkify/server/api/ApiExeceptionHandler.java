@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.talkify.core.domain.exceptions.AppException;
+import com.talkify.core.domain.exceptions.ConflictException;
 import com.talkify.core.domain.exceptions.NotFoundException;
 import com.talkify.core.domain.exceptions.ValidationException;
 
@@ -31,6 +32,12 @@ public class ApiExeceptionHandler {
   private ResponseEntity<ExceptionMessage> handleValidationException(ValidationException exception) {
     var message = new ExceptionMessage(exception.getTitle(), exception.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+  }
+
+  @ExceptionHandler(ConflictException.class)
+  private ResponseEntity<ExceptionMessage> handleConflictException(ConflictException exception) {
+    var message = new ExceptionMessage(exception.getTitle(), exception.getMessage());
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
   }
 
   @ExceptionHandler(AppException.class)
