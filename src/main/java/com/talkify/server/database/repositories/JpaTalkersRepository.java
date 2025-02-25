@@ -24,12 +24,23 @@ public class JpaTalkersRepository implements TalkersRepository {
 
   @Override
   public Optional<Talker> findById(String talkerId) {
-    var talkerModel = repository.findById(UUID.fromString(talkerId));
+    var model = repository.findById(UUID.fromString(talkerId));
 
-    if (talkerModel.isEmpty())
+    if (model.isEmpty())
       return Optional.empty();
 
-    var talker = mapper.toEntity(talkerModel.get());
+    var talker = mapper.toEntity(model.get());
+    return Optional.of(talker);
+  }
+
+  @Override
+  public Optional<Talker> findByEmail(String talkerEmail) {
+    var model = repository.findByEmail(talkerEmail);
+
+    if (model == null)
+      return Optional.empty();
+
+    var talker = mapper.toEntity(model);
     return Optional.of(talker);
   }
 
@@ -38,18 +49,5 @@ public class JpaTalkersRepository implements TalkersRepository {
     var model = mapper.toModel(talker);
     repository.save(model);
     System.out.println(model);
-  }
-
-  @Override
-  public Optional<Talker> findByEmail(String talkerEmail) {
-    var talkerModel = repository.findByEmail(talkerEmail);
-
-    System.out.println(talkerModel);
-
-    if (talkerModel == null)
-      return Optional.empty();
-
-    var talker = mapper.toEntity(talkerModel);
-    return Optional.of(talker);
   }
 }

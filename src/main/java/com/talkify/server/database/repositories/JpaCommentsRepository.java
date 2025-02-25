@@ -8,6 +8,7 @@ import com.talkify.core.interfaces.repositories.CommentsRepository;
 import com.talkify.server.database.mappers.JpaCommentMapper;
 import com.talkify.server.database.models.CommentModel;
 
+import java.util.Optional;
 import java.util.UUID;
 
 interface Repository extends JpaRepository<CommentModel, UUID> {
@@ -26,6 +27,29 @@ public class JpaCommentsRepository implements CommentsRepository {
     var model = mapper.toModel(comment);
     model.setDocumentId(UUID.fromString(documentId));
     repository.save(model);
+  }
+
+  @Override
+  public void update(Comment comment) {
+    var model = mapper.toModel(comment);
+    repository.save(model);
+  }
+
+  @Override
+  public Optional<Comment> findById(String commentId) {
+    var model = repository.findById(UUID.fromString(commentId));
+
+    if (model.isEmpty())
+      return Optional.empty();
+
+    var comment = mapper.toEntity(model.get());
+    return Optional.of(comment);
+  }
+
+  @Override
+  public void delete(Comment comment) {
+    var model = mapper.toModel(comment);
+    repository.delete(model);
   }
 
 }
