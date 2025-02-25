@@ -1,4 +1,4 @@
-package com.talkify.core.use_cases;
+package com.talkify.core.use_cases.comments;
 
 import com.talkify.core.domain.dtos.CommentDto;
 import com.talkify.core.domain.dtos.TalkerDto;
