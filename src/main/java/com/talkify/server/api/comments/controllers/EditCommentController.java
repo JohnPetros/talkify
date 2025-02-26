@@ -12,21 +12,21 @@ import com.talkify.core.domain.dtos.CommentDto;
 import com.talkify.core.interfaces.repositories.CommentsRepository;
 import com.talkify.core.use_cases.comments.EditCommentUseCase;
 
-@Data
-class Body {
-  private String commentId;
-  private String commentContent;
-}
-
 @CommentsController
 public class EditCommentController {
   @Autowired
   private CommentsRepository repository;
 
+  @Data
+  private static class Body {
+    String commentId;
+    String commentContent;
+  }
+
   @PutMapping
   public ResponseEntity<CommentDto> handle(@RequestBody Body body) {
     var useCase = new EditCommentUseCase(repository);
-    var commentDto = useCase.execute(body.getCommentId(), body.getCommentContent());
+    var commentDto = useCase.execute(body.commentId, body.commentContent);
     return ResponseEntity.status(HttpStatus.OK).body(commentDto);
   }
 }

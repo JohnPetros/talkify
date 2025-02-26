@@ -1,6 +1,8 @@
 package com.talkify.core.domain.entities;
 
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.talkify.core.domain.abstracts.Entity;
 import com.talkify.core.domain.dtos.CommentDto;
@@ -10,13 +12,14 @@ import com.talkify.core.domain.records.Text;
 public final class Comment extends Entity {
   private Text content;
   private DateTime postedAt;
-  private Talker talker;
+  private UUID talkerId;
+  private List<Comment> replies;
 
   public Comment(CommentDto dto) {
     super(dto.id);
-    this.content = Text.create(dto.content, "Conteúdo do comentário");
-    this.postedAt = DateTime.create(dto.postedAt, "Data de postagem do comentário");
-    this.talker = new Talker(dto.talker);
+    this.content = Text.create(dto.content, "Comment content");
+    this.postedAt = DateTime.create(dto.postedAt, "Comment posting date");
+    this.replies = dto.replies.stream().map(Comment::new).collect(Collectors.toList());
   }
 
   public Text getContent() {
@@ -28,6 +31,14 @@ public final class Comment extends Entity {
   }
 
   public Talker getTalker() {
+    return talker;
+  }
+
+  public List<Comment> getReplies() {
+    return replies;
+  }
+
+  public Talker edit(String content) {
     return talker;
   }
 

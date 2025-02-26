@@ -2,6 +2,7 @@ package com.talkify.server.database.repositories;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.talkify.core.domain.entities.Comment;
 import com.talkify.core.interfaces.repositories.CommentsRepository;
@@ -11,21 +12,23 @@ import com.talkify.server.database.models.CommentModel;
 import java.util.Optional;
 import java.util.UUID;
 
-interface Repository extends JpaRepository<CommentModel, UUID> {
+interface JpaCommentModelRepository extends JpaRepository<CommentModel, UUID> {
 
 }
 
 public class JpaCommentsRepository implements CommentsRepository {
   @Autowired
-  Repository repository;
+  JpaCommentModelRepository repository;
 
   @Autowired
   JpaCommentMapper mapper;
 
   @Override
+  @Transactional
   public void add(Comment comment, String documentId) {
     var model = mapper.toModel(comment);
-    model.setDocumentId(UUID.fromString(documentId));
+    // model.setDocumentId(UUID.fromString(documentId));
+    System.out.println(model);
     repository.save(model);
   }
 

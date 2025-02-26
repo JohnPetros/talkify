@@ -13,12 +13,6 @@ import com.talkify.core.interfaces.repositories.CommentsRepository;
 import com.talkify.core.interfaces.repositories.TalkersRepository;
 import com.talkify.core.use_cases.comments.PostCommentUseCase;
 
-@Data
-class Body {
-  private String documentId;
-  private CommentDto comment;
-}
-
 @CommentsController
 public class PostCommentController {
   @Autowired
@@ -27,10 +21,16 @@ public class PostCommentController {
   @Autowired
   private TalkersRepository talkersRepository;
 
+  @Data
+  private static class Body {
+    String documentId;
+    CommentDto comment;
+  }
+
   @PostMapping
   public ResponseEntity<CommentDto> handle(@RequestBody Body body) {
     var useCase = new PostCommentUseCase(commentsRepository, talkersRepository);
-    var commentDto = useCase.execute(body.getComment(), body.getDocumentId());
+    var commentDto = useCase.execute(body.comment, body.documentId);
     return ResponseEntity.status(HttpStatus.CREATED).body(commentDto);
   }
 }

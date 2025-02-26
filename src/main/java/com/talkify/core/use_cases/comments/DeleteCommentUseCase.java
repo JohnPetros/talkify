@@ -19,7 +19,7 @@ public class DeleteCommentUseCase {
   private Comment findComment(String commentId) {
     var comment = repository.findById(commentId);
     if (comment.isEmpty()) {
-      throw new NotFoundException("Comentário não encontrado");
+      throw new NotFoundException("Comment not found");
     }
     return comment.get();
   }

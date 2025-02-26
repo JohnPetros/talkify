@@ -5,6 +5,7 @@ import com.talkify.core.domain.dtos.TalkerDto;
 import com.talkify.core.domain.entities.Comment;
 import com.talkify.core.domain.entities.Talker;
 import com.talkify.core.domain.exceptions.ConflictException;
+import com.talkify.core.domain.exceptions.NotFoundException;
 import com.talkify.core.interfaces.repositories.CommentsRepository;
 import com.talkify.core.interfaces.repositories.TalkersRepository;
 
@@ -24,11 +25,14 @@ public class PostCommentUseCase {
       commentTalker = addTalkerToRepository(commentDto.talker);
     } else {
       var currentTalker = talkersRepository.findById(commentDto.talker.id);
+      if (currentTalker.isEmpty())
+        throw new NotFoundException("Talker not found");
       commentTalker = currentTalker.get();
     }
 
     commentDto.setTalker(commentTalker.getDto());
     var comment = new Comment(commentDto);
+    commentsRepository.add(comment, documentId);
     return comment.getDto();
   }
 
@@ -38,9 +42,9 @@ public class PostCommentUseCase {
     var talkerWithExistingEmail = talkersRepository.findByEmail(talkerEmail);
 
     if (talkerWithExistingEmail.isPresent())
-      throw new ConflictException("E-mail já em uso");
-    talkersRepository.add(talker);
+      throw new ConflictException(talkerEmail + " email is already in use");
 
+    talkersRepository.add(talker);
     return talker;
   }
 }
