@@ -31,7 +31,7 @@ public class CommentDto {
     return this;
   }
 
-  public CommentDto setTalker(String talkerId) {
+  public CommentDto setTalkerId(String talkerId) {
     this.talkerId = talkerId;
     return this;
   }

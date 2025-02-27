@@ -33,7 +33,7 @@ public class CommentModel {
   @Column
   private String content;
 
-  @Column(name = "document_id")
+  @Column(name = "document_id", nullable = true)
   private UUID documentId;
 
   @ManyToOne

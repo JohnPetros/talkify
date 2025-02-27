@@ -14,7 +14,7 @@ public record Email(Text text) {
     var text = Text.create(value, key);
     Matcher matcher = EMAIL_PATTERN.matcher(text.value());
     if (!matcher.matches()) {
-      throw new ValidationException(key, "Não é um e-mail válido");
+      throw new ValidationException(key, value + "is not");
     }
     return new Email(text);
   }

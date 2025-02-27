@@ -5,25 +5,21 @@ import com.talkify.core.domain.entities.Comment;
 import com.talkify.core.domain.exceptions.CommentNotFoundExeception;
 import com.talkify.core.interfaces.repositories.CommentsRepository;
 
-public class EditCommentUseCase {
+public class ReplyCommentUseCase {
   private CommentsRepository repository;
 
-  public EditCommentUseCase(CommentsRepository repository) {
+  public ReplyCommentUseCase(CommentsRepository repository) {
     this.repository = repository;
   }
 
-  public CommentDto execute(String commentId, String commentContent) {
-    var comment = findComment(commentId);
-    comment.edit(commentContent);
-    repository.update(comment);
-    return comment.getDto();
-  }
-
-  private Comment findComment(String commentId) {
+  public CommentDto execute(CommentDto replyDto, String commentId) {
+    var reply = new Comment(replyDto);
     var comment = repository.findById(commentId);
-    if (comment.isEmpty()) {
+    if (comment.isEmpty())
       throw new CommentNotFoundExeception();
-    }
-    return comment.get();
+
+    repository.add(reply);
+
+    return reply.getDto();
   }
 }

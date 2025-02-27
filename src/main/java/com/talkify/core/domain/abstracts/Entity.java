@@ -2,27 +2,24 @@ package com.talkify.core.domain.abstracts;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
-import java.util.UUID;
+
+import com.talkify.core.domain.records.Id;
 
 public abstract class Entity {
-  private final UUID id;
+  private final Id id;
 
   protected Entity(String id) {
-    this.id = (id != null) ? UUID.fromString(id) : UUID.randomUUID();
+    this.id = (id != null) ? Id.create(id, this.getClass().getName() + " Id") : Id.random();
   }
 
-  public UUID getId() {
+  public Id getId() {
     return id;
-  }
-
-  public Boolean isEqualTo(Entity entity) {
-    return id == entity.id;
   }
 
   @Override
   public boolean equals(Object object) {
     Entity entity = (Entity) object;
-    return Objects.equals(getId(), entity.getId());
+    return Objects.equals(getId().toString(), entity.getId().toString());
   }
 
   @Override
@@ -32,8 +29,9 @@ public abstract class Entity {
 
   @Override
   public String toString() {
-    Field[] fields = this.getClass().getDeclaredFields();
-    StringBuilder fieldsString = new StringBuilder("{\n");
+    Field[] fields = getClass().getDeclaredFields();
+    var className = getClass().getSimpleName();
+    StringBuilder fieldsString = new StringBuilder(className + " {\n");
 
     for (Field field : fields) {
       field.setAccessible(true);

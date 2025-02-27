@@ -1,11 +1,11 @@
 package com.talkify.core.use_cases.comments;
 
 import com.talkify.core.domain.entities.Comment;
-import com.talkify.core.domain.exceptions.NotFoundException;
+import com.talkify.core.domain.exceptions.CommentNotFoundExeception;
 import com.talkify.core.interfaces.repositories.CommentsRepository;
 
 public class DeleteCommentUseCase {
-  CommentsRepository repository;
+  private CommentsRepository repository;
 
   public DeleteCommentUseCase(CommentsRepository repository) {
     this.repository = repository;
@@ -18,9 +18,9 @@ public class DeleteCommentUseCase {
 
   private Comment findComment(String commentId) {
     var comment = repository.findById(commentId);
-    if (comment.isEmpty()) {
-      throw new NotFoundException("Comment not found");
-    }
+    if (comment.isEmpty())
+      throw new CommentNotFoundExeception();
+
     return comment.get();
   }
 }

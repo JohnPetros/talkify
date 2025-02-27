@@ -10,23 +10,23 @@ import org.springframework.http.ResponseEntity;
 
 import com.talkify.core.domain.dtos.CommentDto;
 import com.talkify.core.interfaces.repositories.CommentsRepository;
-import com.talkify.core.use_cases.comments.PostCommentUseCase;
+import com.talkify.core.use_cases.comments.ReplyCommentUseCase;
 
 @CommentsController
-public class PostCommentController {
+public class ReplyCommentController {
   @Autowired
   private CommentsRepository commentsRepository;
 
   @Data
   private static class Body {
-    String documentId;
-    CommentDto comment;
+    CommentDto reply;
+    String commentId;
   }
 
-  @PostMapping
+  @PostMapping("/reply")
   public ResponseEntity<CommentDto> handle(@RequestBody Body body) {
-    var useCase = new PostCommentUseCase(commentsRepository);
-    var commentDto = useCase.execute(body.comment, body.documentId);
+    var useCase = new ReplyCommentUseCase(commentsRepository);
+    var commentDto = useCase.execute(body.reply, body.commentId);
     return ResponseEntity.status(HttpStatus.CREATED).body(commentDto);
   }
 }

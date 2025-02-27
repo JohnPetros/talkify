@@ -1,25 +1,28 @@
 package com.talkify.core.domain.entities;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import com.talkify.core.domain.abstracts.Entity;
 import com.talkify.core.domain.dtos.CommentDto;
+import com.talkify.core.domain.records.Collection;
 import com.talkify.core.domain.records.DateTime;
 import com.talkify.core.domain.records.Text;
+import com.talkify.core.domain.records.Id;
 
 public final class Comment extends Entity {
   private Text content;
   private DateTime postedAt;
-  private UUID talkerId;
-  private List<Comment> replies;
+  private Id talkerId;
+  private Collection<Comment> replies;
 
   public Comment(CommentDto dto) {
     super(dto.id);
-    this.content = Text.create(dto.content, "Comment content");
-    this.postedAt = DateTime.create(dto.postedAt, "Comment posting date");
-    this.replies = dto.replies.stream().map(Comment::new).collect(Collectors.toList());
+    content = Text.create(dto.content, "Comment content");
+    postedAt = DateTime.create(dto.postedAt, "Comment posting date");
+    talkerId = (dto.id != null) ? Id.create(dto.talkerId, "Talker id") : Id.random();
+    replies = Collection.createFrom(dto.replies, Comment::new);
+  }
+
+  public void addReply(Comment reply) {
+    replies = replies.add(reply);
   }
 
   public Text getContent() {
@@ -30,24 +33,25 @@ public final class Comment extends Entity {
     return postedAt;
   }
 
-  public Talker getTalker() {
-    return talker;
+  public Id getTalkerId() {
+    return talkerId;
   }
 
-  public List<Comment> getReplies() {
+  public Collection<Comment> getReplies() {
     return replies;
   }
 
-  public Talker edit(String content) {
-    return talker;
+  public void edit(String newContent) {
+    content = this.content.update(newContent);
   }
 
   public CommentDto getDto() {
     return new CommentDto()
-        .setId(this.getId().toString())
-        .setContent(this.getContent().value())
-        .setPostedAt(this.getPostedAt().value())
-        .setTalker(this.getTalker().getDto());
+        .setId(getId().toString())
+        .setContent(getContent().value())
+        .setPostedAt(getPostedAt().value())
+        .setReplies(getReplies().map((item) -> item.getDto()).items())
+        .setTalkerId(getTalkerId().toString());
   }
 
 }
