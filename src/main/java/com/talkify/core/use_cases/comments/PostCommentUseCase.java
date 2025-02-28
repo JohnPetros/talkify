@@ -14,11 +14,6 @@ public class PostCommentUseCase {
 
   public CommentDto execute(CommentDto commentDto, String documentId) {
     var comment = new Comment(commentDto);
-    comment.getTalkerId();
-    if (this.repository.hasTalker(comment.getTalkerId())) {
-
-    }
-
     repository.add(comment, Id.create(documentId, "document id"));
     return comment.getDto();
   }

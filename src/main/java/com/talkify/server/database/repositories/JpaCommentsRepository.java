@@ -25,7 +25,7 @@ interface JpaTalkerModelRepository extends JpaRepository<TalkerModel, UUID> {
 
 public class JpaCommentsRepository implements CommentsRepository {
   @Autowired
-  JpaCommentModelRepository repository;
+  JpaCommentModelRepository commentsRepository;
 
   @Autowired
   JpaTalkerModelRepository talkersRepository;
@@ -37,28 +37,31 @@ public class JpaCommentsRepository implements CommentsRepository {
   JpaTalkerMapper talkerMapper;
 
   @Override
+  @Transactional
   public void add(Comment comment, Id documentId) {
+    addTalker(comment.getTalkerId());
     var commentModel = commentMapper.toModel(comment);
     commentModel.setDocumentId(documentId.value());
-    repository.save(commentModel);
+    commentsRepository.save(commentModel);
   }
 
   @Override
   @Transactional
   public void add(Comment comment) {
+    addTalker(comment.getTalkerId());
     var model = commentMapper.toModel(comment);
-    repository.save(model);
+    commentsRepository.save(model);
   }
 
   @Override
   public void update(Comment comment) {
     var model = commentMapper.toModel(comment);
-    repository.save(model);
+    commentsRepository.save(model);
   }
 
   @Override
   public Optional<Comment> findById(Id commentId) {
-    var model = repository.findById(commentId.value());
+    var model = commentsRepository.findById(commentId.value());
 
     if (model.isEmpty())
       return Optional.empty();
@@ -70,23 +73,22 @@ public class JpaCommentsRepository implements CommentsRepository {
   @Override
   public void delete(Comment comment) {
     var model = commentMapper.toModel(comment);
-    repository.delete(model);
+    commentsRepository.delete(model);
   }
 
   @Override
-  public void addWithTalker(Comment comment) {
-    var talkerModel = talkerMapper.toModel(comment.getTalkerId());
-    talkersRepository.save(talkerModel);
-
+  public void addReply(Comment reply, Comment comment) {
+    addTalker(reply.getTalkerId());
+    var replyModel = commentMapper.toModel(reply);
     var commentModel = commentMapper.toModel(comment);
-    repository.save(commentModel);
+    replyModel.setParentComment(commentModel);
+    commentsRepository.save(replyModel);
   }
 
-  // private Boolean addTalker(Id talkerId) {
-  // var talkerModel = talkersRepository.findById(talkerId.value());
-  // if (talkerModel.isEmpty()) {
-
-  // }
-  // }
-
+  private void addTalker(Id talkerId) {
+    var talkerModel = talkersRepository.findById(talkerId.value());
+    if (talkerModel.isEmpty()) {
+      talkersRepository.save(talkerMapper.toModel(talkerId));
+    }
+  }
 }

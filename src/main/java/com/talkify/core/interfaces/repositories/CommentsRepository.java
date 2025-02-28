@@ -12,12 +12,9 @@ public interface CommentsRepository {
 
   void add(Comment comment, Id documentId);
 
-  void addWithTalker(Comment comment);
+  void addReply(Comment reply, Comment comment);
 
   void update(Comment comment);
 
   void delete(Comment comment);
-
-  Boolean hasTalker(Id talkerId);
-
 }

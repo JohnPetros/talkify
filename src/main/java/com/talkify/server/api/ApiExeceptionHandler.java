@@ -13,15 +13,15 @@ import com.talkify.core.domain.exceptions.ValidationException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Data
-@AllArgsConstructor
-class ExceptionMessage {
-  private String title;
-  private String message;
-}
-
 @ControllerAdvice
 public class ApiExeceptionHandler {
+  @Data
+  @AllArgsConstructor
+  private static class ExceptionMessage {
+    private String title;
+    private String message;
+  }
+
   @ExceptionHandler(NotFoundException.class)
   private ResponseEntity<ExceptionMessage> handleNotFoundException(NotFoundException exception) {
     var message = new ExceptionMessage(exception.getTitle(), exception.getMessage());

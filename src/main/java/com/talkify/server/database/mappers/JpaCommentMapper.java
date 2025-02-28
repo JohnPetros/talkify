@@ -17,6 +17,7 @@ public class JpaCommentMapper {
         .setId(model.getId().toString())
         .setContent(model.getContent())
         .setPostedAt(model.getPostedAt())
+        .setTalkerId(model.getTalker().getId().toString())
         .setReplies(
             model
                 .getReplies()
