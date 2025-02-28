@@ -1,10 +1,12 @@
 package com.talkify.server.database.repositories;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.talkify.core.domain.entities.Comment;
+import com.talkify.core.domain.records.Collection;
 import com.talkify.core.domain.records.Id;
 import com.talkify.core.interfaces.repositories.CommentsRepository;
 import com.talkify.server.database.mappers.JpaCommentMapper;
@@ -35,6 +37,13 @@ public class JpaCommentsRepository implements CommentsRepository {
 
   @Autowired
   JpaTalkerMapper talkerMapper;
+
+  @Override
+  public Collection<Comment> findMany(int page, int itemsPerPage) {
+    var pageable = PageRequest.of(page - 1, itemsPerPage);
+    var commentModels = commentsRepository.findAll(pageable).stream().toList();
+    return Collection.createFrom(commentModels, commentMapper::toEntity);
+  }
 
   @Override
   @Transactional

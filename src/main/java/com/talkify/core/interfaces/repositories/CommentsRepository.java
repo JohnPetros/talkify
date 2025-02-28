@@ -1,11 +1,14 @@
 package com.talkify.core.interfaces.repositories;
 
 import com.talkify.core.domain.entities.Comment;
+import com.talkify.core.domain.records.Collection;
 import com.talkify.core.domain.records.Id;
 
 import java.util.Optional;
 
 public interface CommentsRepository {
+  Collection<Comment> findMany(int page, int itemsPerPage);
+
   Optional<Comment> findById(Id commentId);
 
   void add(Comment comment);
