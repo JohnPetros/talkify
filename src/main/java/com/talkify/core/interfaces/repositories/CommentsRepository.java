@@ -20,4 +20,6 @@ public interface CommentsRepository {
   void update(Comment comment);
 
   void delete(Comment comment);
+
+  boolean hasTalker(Id talkerId);
 }

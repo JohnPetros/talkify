@@ -63,6 +63,7 @@ public class JpaCommentsRepository implements CommentsRepository {
   }
 
   @Override
+  @Transactional
   public void update(Comment comment) {
     var model = commentMapper.toModel(comment);
     commentsRepository.save(model);
@@ -95,9 +96,13 @@ public class JpaCommentsRepository implements CommentsRepository {
   }
 
   private void addTalker(Id talkerId) {
-    var talkerModel = talkersRepository.findById(talkerId.value());
-    if (talkerModel.isEmpty()) {
+    if (!this.hasTalker(talkerId)) {
       talkersRepository.save(talkerMapper.toModel(talkerId));
     }
+  }
+
+  public boolean hasTalker(Id talkerId) {
+    var talkerModel = talkersRepository.findById(talkerId.value());
+    return talkerModel.isPresent();
   }
 }
