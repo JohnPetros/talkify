@@ -48,6 +48,10 @@ public class CommentModel {
   @JoinColumn(name = "talker_id")
   private TalkerModel talker;
 
+  @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<CommentVoteModel> votes = new ArrayList<>();
+
   @Column(name = "posted_at")
   @CreationTimestamp
   private LocalDateTime postedAt;
