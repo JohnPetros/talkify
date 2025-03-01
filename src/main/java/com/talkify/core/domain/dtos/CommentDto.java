@@ -9,7 +9,10 @@ public class CommentDto {
   public String content;
   public LocalDateTime postedAt;
   public String talkerId;
+  public int upvotesCount = 0;
+  public int downvotesCount = 0;
   public List<CommentDto> replies = new ArrayList<>();
+  public List<CommentVoteDto> votes = new ArrayList<>();
 
   public CommentDto setId(String id) {
     this.id = id;
@@ -33,6 +36,21 @@ public class CommentDto {
 
   public CommentDto setTalkerId(String talkerId) {
     this.talkerId = talkerId;
+    return this;
+  }
+
+  public CommentDto setVotes(List<CommentVoteDto> votes) {
+    this.votes = votes;
+    return this;
+  }
+
+  public CommentDto setUpvotesCount(int upvotesCount) {
+    this.upvotesCount = upvotesCount;
+    return this;
+  }
+
+  public CommentDto setDownvotesCount(int downvotesCount) {
+    this.downvotesCount = downvotesCount;
     return this;
   }
 }
