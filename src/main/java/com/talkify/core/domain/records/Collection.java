@@ -2,6 +2,7 @@ package com.talkify.core.domain.records;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public record Collection<Item>(List<Item> items) {
@@ -35,5 +36,17 @@ public record Collection<Item>(List<Item> items) {
         .map(mapper)
         .collect(Collectors.toList());
     return new Collection<>(list);
+  }
+
+  public Collection<Item> filter(Predicate<? super Item> predicate) {
+    var list = items
+        .stream()
+        .filter(predicate)
+        .collect(Collectors.toList());
+    return new Collection<>(list);
+  }
+
+  public int size() {
+    return items.size();
   }
 }

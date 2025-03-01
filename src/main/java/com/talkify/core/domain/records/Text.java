@@ -13,4 +13,12 @@ public record Text(String value, String key) {
   public Text update(String value) {
     return Text.create(value, key);
   }
+
+  public boolean equalsTo(String value) {
+    return this.value.equals(value);
+  }
+
+  public boolean notEqualsTo(String value) {
+    return !this.value.equals(value);
+  }
 }
