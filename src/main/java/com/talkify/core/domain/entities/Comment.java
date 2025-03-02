@@ -3,6 +3,7 @@ package com.talkify.core.domain.entities;
 import com.talkify.core.domain.abstracts.Entity;
 import com.talkify.core.domain.dtos.CommentDto;
 import com.talkify.core.domain.dtos.CommentVoteDto;
+import com.talkify.core.domain.records.Attachment;
 import com.talkify.core.domain.records.Collection;
 import com.talkify.core.domain.records.CommentVoteType;
 import com.talkify.core.domain.records.DateTime;
@@ -15,6 +16,7 @@ public final class Comment extends Entity {
   private Id talkerId;
   private Collection<Comment> replies;
   private Collection<CommentVote> votes;
+  private Collection<Attachment> attachments;
 
   public static class CommentVote {
     private Id talkerId;
@@ -42,6 +44,13 @@ public final class Comment extends Entity {
     votes = Collection.createFrom(dto.votes,
         (commentVote) -> new CommentVote(commentVote.talkerId, commentVote.voteType));
     replies = Collection.createFrom(dto.replies, Comment::new);
+    attachments = Collection.createFrom(
+        dto.attachments,
+        (attachment) -> Attachment.create(
+            attachment.name,
+            attachment.key,
+            attachment.contentType));
+
   }
 
   public void vote(String voteType, String talkerId) {
@@ -89,6 +98,7 @@ public final class Comment extends Entity {
         .setReplies(getReplies().map((item) -> item.getDto()).items())
         .setUpvotesCount(getUpvotesCount())
         .setDownvotesCount(getDownvotesCount())
+        .setAttachments(attachments.map(Attachment::getDto).items())
         .setVotes(votes
             .map((vote) -> new CommentVoteDto()
                 .setTalkerId(vote.getTalkerId().value().toString())

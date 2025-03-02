@@ -13,6 +13,7 @@ public class CommentDto {
   public int downvotesCount = 0;
   public List<CommentDto> replies = new ArrayList<>();
   public List<CommentVoteDto> votes = new ArrayList<>();
+  public List<AttachmentDto> attachments = new ArrayList<>();
 
   public CommentDto setId(String id) {
     this.id = id;
@@ -51,6 +52,11 @@ public class CommentDto {
 
   public CommentDto setDownvotesCount(int downvotesCount) {
     this.downvotesCount = downvotesCount;
+    return this;
+  }
+
+  public CommentDto setAttachments(List<AttachmentDto> attachments) {
+    this.attachments = attachments;
     return this;
   }
 }
