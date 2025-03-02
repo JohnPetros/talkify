@@ -1,8 +1,11 @@
 package com.talkify.server.database.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,6 +25,10 @@ import java.util.UUID;
 public class TalkerModel {
   @Id
   private UUID id;
+
+  @ManyToOne
+  @JoinColumn(name = "organization_id")
+  private AccountModel organization;
 
   @OneToMany(mappedBy = "talker", fetch = FetchType.LAZY)
   private List<CommentModel> votedComments;
