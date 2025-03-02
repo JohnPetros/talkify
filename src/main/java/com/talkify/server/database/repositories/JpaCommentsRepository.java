@@ -6,16 +6,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.talkify.core.domain.entities.Comment;
+import com.talkify.core.domain.records.Attachment;
 import com.talkify.core.domain.records.Collection;
 import com.talkify.core.domain.records.Id;
 import com.talkify.core.interfaces.repositories.CommentsRepository;
+import com.talkify.server.database.mappers.JpaAttachmentMapper;
 import com.talkify.server.database.mappers.JpaCommentMapper;
 import com.talkify.server.database.mappers.JpaTalkerMapper;
+import com.talkify.server.database.models.AttachmentModel;
 import com.talkify.server.database.models.CommentModel;
 import com.talkify.server.database.models.TalkerModel;
 
 import java.util.Optional;
 import java.util.UUID;
+
+interface JpaAttachmentModelRepository extends JpaRepository<AttachmentModel, UUID> {
+  public AttachmentModel findByKey(String key);
+}
 
 interface JpaCommentModelRepository extends JpaRepository<CommentModel, UUID> {
 
@@ -33,10 +40,16 @@ public class JpaCommentsRepository implements CommentsRepository {
   JpaTalkerModelRepository talkersRepository;
 
   @Autowired
+  JpaAttachmentModelRepository attachmentsRepository;
+
+  @Autowired
   JpaCommentMapper commentMapper;
 
   @Autowired
   JpaTalkerMapper talkerMapper;
+
+  @Autowired
+  JpaAttachmentMapper attachmentMapper;
 
   @Override
   public Collection<Comment> findMany(int page, int itemsPerPage) {
@@ -104,5 +117,22 @@ public class JpaCommentsRepository implements CommentsRepository {
   public boolean hasTalker(Id talkerId) {
     var talkerModel = talkersRepository.findById(talkerId.value());
     return talkerModel.isPresent();
+  }
+
+  @Override
+  public void addAttachment(Attachment attachment, Comment comment) {
+    var attachmentModel = attachmentMapper.toModel(attachment);
+    var commentModel = commentMapper.toModel(comment);
+    attachmentModel.setComment(commentModel);
+    attachmentsRepository.save(attachmentModel);
+  }
+
+  @Override
+  public Optional<Attachment> findAttachment(String attachmentKey) {
+    var attachmentModel = attachmentsRepository.findByKey(attachmentKey);
+    if (attachmentModel == null) {
+      return Optional.empty();
+    }
+    return Optional.of(attachmentMapper.toRecord(attachmentModel));
   }
 }
