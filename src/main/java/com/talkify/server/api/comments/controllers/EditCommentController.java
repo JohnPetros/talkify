@@ -18,13 +18,13 @@ public class EditCommentController {
   private CommentsRepository repository;
 
   @Data
-  private static class Body {
+  private static class Request {
     String commentId;
     String commentContent;
   }
 
   @PutMapping
-  public ResponseEntity<CommentDto> handle(@RequestBody Body body) {
+  public ResponseEntity<CommentDto> handle(@RequestBody Request body) {
     var useCase = new EditCommentUseCase(repository);
     var commentDto = useCase.execute(body.commentId, body.commentContent);
     return ResponseEntity.status(HttpStatus.OK).body(commentDto);
