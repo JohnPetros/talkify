@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.talkify.core.domain.dtos.AttachmentDto;
 import com.talkify.core.domain.dtos.CommentDto;
 import com.talkify.core.domain.entities.Comment;
 import com.talkify.core.domain.records.CommentVoteType;
@@ -30,7 +31,15 @@ public class JpaCommentMapper {
                     .setContent(reply.getContent().toString())
                     .setPostedAt(reply.getPostedAt())
                     .setTalkerId(model.getTalker().getId().toString()))
-
+                .collect(Collectors.toList()))
+        .setAttachments(
+            model
+                .getAttachments()
+                .stream()
+                .map((attachment) -> new AttachmentDto()
+                    .setName(attachment.getName())
+                    .setKey(attachment.getKey())
+                    .setContentType(attachment.getContentType()))
                 .collect(Collectors.toList()));
 
     return new Comment(dto);
