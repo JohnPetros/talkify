@@ -7,6 +7,14 @@ public record DateTime(LocalDateTime value) {
     if (value instanceof LocalDateTime) {
       return new DateTime(value);
     }
+    return DateTime.createFromNow();
+  }
+
+  public static DateTime createFromNow() {
     return new DateTime(LocalDateTime.now());
+  }
+
+  public DateTime addHours(int hours) {
+    return new DateTime(value.plusHours(hours));
   }
 }
