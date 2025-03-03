@@ -26,16 +26,16 @@ public class AttachmentModel {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @Column
+  @Column(nullable = false)
   private String name;
 
-  @Column
+  @Column(nullable = false, unique = true)
   private String key;
 
-  @Column
+  @Column(nullable = false)
   private String contentType;
 
   @ManyToOne
-  @JoinColumn(name = "comment_id")
+  @JoinColumn(name = "comment_id", nullable = false)
   private CommentModel comment;
 }

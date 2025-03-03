@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @Embeddable
 class CommentVoteModelId {
   @ManyToOne
-  @JoinColumn(name = "comment_id")
+  @JoinColumn(name = "comment_id", nullable = false)
   private CommentModel comment;
 
   @ManyToOne
-  @JoinColumn(name = "talker_id")
+  @JoinColumn(name = "talker_id", nullable = false)
   private TalkerModel talker;
 }

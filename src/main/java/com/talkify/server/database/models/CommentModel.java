@@ -31,7 +31,7 @@ public class CommentModel {
   @Id
   private UUID id;
 
-  @Column
+  @Column(columnDefinition = "TEXT", nullable = false)
   private String content;
 
   @Column(name = "document_id", nullable = true)
@@ -46,7 +46,7 @@ public class CommentModel {
   private List<CommentModel> replies = new ArrayList<>();
 
   @ManyToOne(cascade = CascadeType.REMOVE)
-  @JoinColumn(name = "talker_id")
+  @JoinColumn(name = "talker_id", nullable = false)
   private TalkerModel talker;
 
   @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -57,7 +57,7 @@ public class CommentModel {
   @Builder.Default
   private List<AttachmentModel> attachments = new ArrayList<>();
 
-  @Column(name = "posted_at")
+  @Column(name = "posted_at", nullable = false)
   @CreationTimestamp
   private LocalDateTime postedAt;
 }

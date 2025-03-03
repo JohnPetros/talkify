@@ -28,14 +28,14 @@ public class CommentVoteModel {
   private UUID id;
 
   @ManyToOne
-  @JoinColumn(name = "comment_id")
+  @JoinColumn(name = "comment_id", nullable = false)
   private CommentModel comment;
 
   @ManyToOne
-  @JoinColumn(name = "talker_id")
+  @JoinColumn(name = "talker_id", nullable = false)
   private TalkerModel talker;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "vote_type")
+  @Column(name = "vote_type", nullable = false)
   private CommentVoteType.VoteType voteType;
 }
