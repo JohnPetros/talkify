@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.talkify.core.domain.exceptions.AppException;
 import com.talkify.core.domain.exceptions.ConflictException;
+import com.talkify.core.domain.exceptions.NotAuthenticatedException;
 import com.talkify.core.domain.exceptions.NotFoundException;
 import com.talkify.core.domain.exceptions.ValidationException;
 
@@ -38,6 +39,13 @@ public class ApiExeceptionHandler {
   private ResponseEntity<ExceptionMessage> handleConflictException(ConflictException exception) {
     var message = new ExceptionMessage(exception.getTitle(), exception.getMessage());
     return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
+  }
+
+  @ExceptionHandler(NotAuthenticatedException.class)
+  private ResponseEntity<ExceptionMessage> handleNotAuthenticatedException(
+      NotAuthenticatedException exception) {
+    var message = new ExceptionMessage(exception.getTitle(), exception.getMessage());
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
   }
 
   @ExceptionHandler(AppException.class)
