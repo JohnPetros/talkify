@@ -9,7 +9,8 @@ import com.talkify.server.database.models.AccountModel;
 @Service
 public class JpaAccountMapper {
   public Account toEntity(AccountModel model) {
-    var dto = new AccountDto().setId(null)
+    var dto = new AccountDto()
+        .setId(model.getId().toString())
         .setName(model.getName())
         .setEmail(model.getEmail())
         .setPassword(model.getPassword())
@@ -25,6 +26,7 @@ public class JpaAccountMapper {
         .name(account.getName().value())
         .email(account.getEmail().value())
         .password(account.getPassword().value())
+        .role(account.getRole().value())
         .build();
 
     return model;

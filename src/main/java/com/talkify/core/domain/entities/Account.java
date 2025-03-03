@@ -38,10 +38,10 @@ public final class Account extends Entity {
 
   public AccountDto getDto(boolean shouldIncludePassword) {
     var dto = new AccountDto()
-        .setId(getId().toString())
+        .setId(getId().value().toString())
         .setName(getName().value())
         .setEmail(getEmail().value())
-        .setRole(getRole().value().toLowerCase());
+        .setRole(getRole().toString());
 
     if (shouldIncludePassword) {
       dto.setPassword(getPassword().value());
