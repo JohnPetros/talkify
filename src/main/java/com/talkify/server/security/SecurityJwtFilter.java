@@ -37,6 +37,7 @@ public class SecurityJwtFilter extends OncePerRequestFilter {
 
     if (jwt != null) {
       var subject = jwtProvider.validateToken(jwt);
+      System.out.println("Subject: " + subject);
       var account = getAccount(subject);
       var securityUser = new SecurityUser(account);
       var authentication = new UsernamePasswordAuthenticationToken(

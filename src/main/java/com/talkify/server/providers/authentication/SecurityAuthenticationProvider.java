@@ -24,7 +24,7 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
   public String login(String email, String password) {
     var authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
     authenticationManager.authenticate(authenticationToken);
-    var jwt = jwtProvider.generateToken(password);
+    var jwt = jwtProvider.generateToken(email);
     return jwt;
   }
 

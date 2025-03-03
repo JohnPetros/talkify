@@ -29,10 +29,11 @@ public class Auth0JwtProvider implements JwtProvider {
   public String generateToken(String email) {
     var expirationDate = DateTime.createFromNow().addHours(1);
 
-    var jwt = JWT.create()
+    var jwt = JWT
+        .create()
         .withIssuer(issuer)
         .withSubject(email)
-        .withExpiresAt(expirationDate.value().toInstant(ZoneOffset.of("00:00")))
+        .withExpiresAt(expirationDate.value().toInstant(ZoneOffset.of("-03:00")))
         .sign(algorithm);
 
     return jwt;

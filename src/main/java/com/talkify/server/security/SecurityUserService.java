@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.talkify.core.domain.entities.Account;
+import com.talkify.core.domain.exceptions.NotAuthenticatedException;
 import com.talkify.core.interfaces.repositories.AccountsRepository;
 import com.talkify.core.use_cases.auth.GetAccountUseCase;
 
@@ -18,10 +19,14 @@ public class SecurityUserService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    var useCase = new GetAccountUseCase(accountsRepository);
-    var accountDto = useCase.execute(email);
-    var account = new Account(accountDto);
-    var securityUser = new SecurityUser(account);
-    return securityUser;
+    try {
+      var useCase = new GetAccountUseCase(accountsRepository);
+      var accountDto = useCase.execute(email);
+      var account = new Account(accountDto);
+      var securityUser = new SecurityUser(account);
+      return securityUser;
+    } catch (Exception e) {
+      throw new NotAuthenticatedException("Account not found");
+    }
   }
 }
